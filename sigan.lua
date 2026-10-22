@@ -15,15 +15,15 @@
 
 --- Export Types ---
 
-local auth = ...
+-- Создаем локальный аналог auth на основе LocalPlayer
+local auth = {
+    username = LocalPlayer.Name,
+    UID = LocalPlayer.UserId,
+    days_left = "Lifetime"
+}
 
-if auth then
-    print("Library loaded for:", auth.username)
-    print("UID:", auth.UID)
-    print("Days Left:", auth.days_left)
-else
-	game.Players.LocalPlayer:Kick("Auth failed.")
-end
+print("Library loaded for:", auth.username)
+print("UID:", auth.UID)
 
 export type cloneref = (target: Instance) -> Instance;
 
@@ -9883,10 +9883,9 @@ function Compkiller.new(Config : Window)
 		config = config or {};
 		config.Logo = config.Logo or Config.Logo;
 		config.Username = LocalPlayer.Name;
-		config.ExpireDate = "Lifetime"; -- Или любое нужное значение
+		config.ExpireDate = "Lifetime";
 		config.WindowName = config.WindowName or Config.Name;
 
-		-- Получаем аватар (голову) игрока стандартным методом Roblox
 		local content, isReady = Players:GetUserThumbnailAsync(LocalPlayer.UserId, Enum.ThumbnailType.HeadShot, Enum.ThumbnailSize.Size150x150);
 		config.UserProfile = content;
 
