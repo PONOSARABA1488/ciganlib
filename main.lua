@@ -15,16 +15,6 @@
 
 --- Export Types ---
 
-local auth = ...
-
-if auth then
-    print("Library loaded for:", auth.username)
-    print("UID:", auth.UID)
-    print("Days Left:", auth.days_left)
-else
-	game.Players.LocalPlayer:Kick("Auth failed.")
-end
-
 export type cloneref = (target: Instance) -> Instance;
 
 export type Window = {
@@ -10098,14 +10088,14 @@ function Compkiller:ConfigManager(ConfigManager: ConfigManager) : ConfigFunction
 	function Args:WriteConfig(Config: WriteConfig)
 		Config = Compkiller.__CONFIG(Config , {
 			Name = Compkiller:_RandomString(),
-			Author = auth.username or "Uknown",
+			Author = LocalPlayer.name,
 		});
 
 		local Flags = Compkiller:GetConfig("MK");
 
 		Flags["__INFORMATION"] = {
 			Type = "Information",
-			Author = auth.username or "Uknown",
+			Author = LocalPlayer.name,
 			Name = Config.Name,
 			CreatedDate = Compkiller:GetDate()
 		};
