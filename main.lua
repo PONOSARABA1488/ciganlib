@@ -15,6 +15,16 @@
 
 --- Export Types ---
 
+local auth = ...
+
+if auth then
+    print("Library loaded for:", auth.username)
+    print("UID:", auth.UID)
+    print("Days Left:", auth.days_left)
+else
+	game.Players.LocalPlayer:Kick("Auth failed.")
+end
+
 export type cloneref = (target: Instance) -> Instance;
 
 export type Window = {
@@ -6333,7 +6343,7 @@ function Compkiller.new(Config : Window)
 		Notify = Compkiller.newNotify()
 	};
 
-	WindowArgs.Username = "shegol";
+	WindowArgs.Username = "frvgmxnt";
 
 	if Compkiller:_IsMobile() then
 		WindowArgs.AlwayShowTab = true;
@@ -9871,10 +9881,27 @@ function Compkiller.new(Config : Window)
 
 	function WindowArgs:Update(config: WindowUpdate)
 		config = config or {};
-		config.Logo = 8508980536;
-		config.Username = LocalPlayer.name;
-		config.ExpireDate = "67 days";
-		config.WindowName = "Ciganware";
+		config.Logo = config.Logo or Config.Logo;
+		config.Username = LocalPlayer.Name;
+		config.ExpireDate = "Lifetime"; -- Или любое нужное значение
+		config.WindowName = config.WindowName or Config.Name;
+
+		-- Получаем аватар (голову) игрока стандартным методом Roblox
+		local content, isReady = Players:GetUserThumbnailAsync(LocalPlayer.UserId, Enum.ThumbnailType.HeadShot, Enum.ThumbnailSize.Size150x150);
+		config.UserProfile = content;
+
+		UserText.Text = config.Username;
+		CompLogo.Image = config.Logo;
+		ExpireText.Text = config.ExpireDate;
+		WindowLabel.Text = config.WindowName;
+		UserProfile.Image = config.UserProfile;
+		WindowArgs.Username = config.Username;
+
+		Config.Logo = config.Logo or Config.Logo;
+		WindowArgs.Username = config.Username or WindowArgs.Username;
+		WindowArgs.ExipreDate = config.ExpireDate or WindowArgs.ExipreDate;
+		Config.Name = config.WindowName or Config.Name;
+		WindowArgs.Profile = config.UserProfile or WindowArgs.Profile;
 	end;
 
 	WindowArgs.LOOP_THREAD = task.spawn(function()
@@ -10088,14 +10115,14 @@ function Compkiller:ConfigManager(ConfigManager: ConfigManager) : ConfigFunction
 	function Args:WriteConfig(Config: WriteConfig)
 		Config = Compkiller.__CONFIG(Config , {
 			Name = Compkiller:_RandomString(),
-			Author = LocalPlayer.name,
+			Author = LocalPlayer.Name or "Unknown",
 		});
 
 		local Flags = Compkiller:GetConfig("MK");
 
 		Flags["__INFORMATION"] = {
 			Type = "Information",
-			Author = LocalPlayer.name,
+			Author = LocalPlayer.Name or "Unknown",
 			Name = Config.Name,
 			CreatedDate = Compkiller:GetDate()
 		};
